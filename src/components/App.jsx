@@ -59,7 +59,7 @@ export default function App() {
           color: '#010101',
         }}
       >
-        React homework-04 Image
+        React homework-04 Images
       </div>
       <div
         style={{
