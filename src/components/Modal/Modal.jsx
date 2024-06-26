@@ -1,49 +1,46 @@
-import { Component } from 'react';
+import { useEffect } from 'react';
 import styles from './Modal.module.scss';
 import PropTypes from 'prop-types';
 
-class Modal extends Component {
-  constructor(props) {
-    super(props);
-  }
-  componentDidMount() {
-    document.addEventListener('keydown', this.handleKeyDown);
-  }
-  componentWillUnmount() {
-    document.removeEventListener('keydown', this.handleKeyDown);
-  }
+export default function Modal({ isShow, image, closeModal }) {
+  useEffect(() => {
+    const handleKeyDown = ev => {
+      if (ev.key === 'Escape') {
+        closeModal();
+      }
+    };
 
-  handleKeyDown = ev => {
-    if (ev.key === 'Escape') {
-      this.props.closeModal();
+    if (isShow) {
+      document.addEventListener('keydown', handleKeyDown);
     }
-  };
 
-  handleOverlayClick = ev => {
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isShow, closeModal]);
+
+  const handleOverlayClick = ev => {
     if (ev.target === ev.currentTarget) {
-      this.props.closeModal();
+      closeModal();
     }
   };
 
-  render() {
-    const { isShow, image } = this.props;
-
-    if (!isShow) {
-      return null;
-    }
-    return (
-      <div className={styles.overlay} onClick={this.handleOverlayClick}>
-        <div className={styles.modal}>
-          <img
-            src={image.largeImageURL}
-            alt={image.tags}
-            width={'800px'}
-            height={'600px'}
-          />
-        </div>
-      </div>
-    );
+  if (!isShow) {
+    return null;
   }
+
+  return (
+    <div className={styles.overlay} onClick={handleOverlayClick}>
+      <div className={styles.modal}>
+        <img
+          src={image.largeImageURL}
+          alt={image.tags}
+          width={'800px'}
+          height={'600px'}
+        />
+      </div>
+    </div>
+  );
 }
 
 Modal.propTypes = {
@@ -54,5 +51,3 @@ Modal.propTypes = {
   }).isRequired,
   closeModal: PropTypes.func.isRequired,
 };
-
-export default Modal;

@@ -1,55 +1,43 @@
 import styles from './ImageGallery.module.scss';
 import ImageGalleryItem from '../ImageGalleryItem/ImageGalleryItem';
 import Modal from '../Modal/Modal';
-import { Component } from 'react';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 
-export default class ImageGallery extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      showModal: false,
-      selectedImage: null,
-    };
-  }
+export default function ImageGallery({ images }) {
+  const [showModal, setShowModal] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
 
-  openModal = image => {
-    this.setState({
-      showModal: true,
-      selectedImage: image,
-    });
+  const openModal = image => {
+    setShowModal(true);
+    setSelectedImage(image);
   };
 
-  closeModal = () => {
-    this.setState({
-      showModal: false,
-      selectedImage: null,
-    });
+  const closeModal = () => {
+    setShowModal(false);
+    setSelectedImage(null);
   };
 
-  render() {
-    const { images } = this.props;
-    return (
-      <div>
-        <ul className={styles.gallery}>
-          {images.map(image => (
-            <ImageGalleryItem
-              key={image.id}
-              image={image}
-              openModal={this.openModal}
-            />
-          ))}
-        </ul>
-        {this.state.showModal && (
-          <Modal
-            isShow={this.state.showModal}
-            image={this.state.selectedImage}
-            closeModal={this.closeModal}
+  return (
+    <div>
+      <ul className={styles.gallery}>
+        {images.map(image => (
+          <ImageGalleryItem
+            key={image.id}
+            image={image}
+            openModal={openModal}
           />
-        )}
-      </div>
-    );
-  }
+        ))}
+      </ul>
+      {showModal && (
+        <Modal
+          isShow={showModal}
+          image={selectedImage}
+          closeModal={closeModal}
+        />
+      )}
+    </div>
+  );
 }
 
 ImageGallery.propTypes = {

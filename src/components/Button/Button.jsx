@@ -2,7 +2,7 @@ import styles from './Button.module.scss';
 import PropTypes from 'prop-types';
 
 const Button = ({ onClick, page, images, isLoading }) => {
-  if (page === 1 && images.length === 0 && isLoading !== false) {
+  if ((page === 1 && images.length === 0) || isLoading !== false) {
     return null;
   }
 
